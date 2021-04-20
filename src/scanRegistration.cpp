@@ -81,6 +81,7 @@ std::vector<ros::Publisher> pubEachScan;
 bool PUB_EACH_LINE = false;
 
 double MINIMUM_RANGE = 0.1; 
+std::string input_pointcloud = "/velodyne_points";
 
 template <typename PointT>
 void removeClosedPointCloud(const pcl::PointCloud<PointT> &cloud_in,
@@ -466,6 +467,7 @@ int main(int argc, char **argv)
     nh.param<int>("scan_line", N_SCANS, 16);
 
     nh.param<double>("minimum_range", MINIMUM_RANGE, 0.1);
+    nh.param<std::string>("input_pointcloud", input_pointcloud, "/velodyne_points");
 
     printf("scan line number %d \n", N_SCANS);
 
@@ -475,7 +477,7 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    ros::Subscriber subLaserCloud = nh.subscribe<sensor_msgs::PointCloud2>("/velodyne_points", 100, laserCloudHandler);
+    ros::Subscriber subLaserCloud = nh.subscribe<sensor_msgs::PointCloud2>(input_pointcloud, 100, laserCloudHandler);
 
     pubLaserCloud = nh.advertise<sensor_msgs::PointCloud2>("/velodyne_cloud_2", 100);
 
